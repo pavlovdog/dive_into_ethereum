@@ -247,7 +247,7 @@ contract EthereumCV is Structures{
 }
 ```
 
-Самые сообразительные уже догадались, что нотация `Project[] projects` означает создание динамического массива с элеметнами типа `Project`.
+Самые сообразительные уже догадались, что нотация `Project[] projects` означает создание динамического массива с элеметнами типа `Project`. А вот с *модификатором* `public` уже сложнее. По сути, он заменяет нам написание функции вроде `get_project(int position)` - компилятор сделает всю работу за нас.
 
 **BTW** На всякий случай отмечу, что кроме локального файла, Remix умеет импортировать `.sol` файлы по ссылке на Github и даже [с помощью протокола Swarm](https://www.reddit.com/r/ethereum/comments/5vpm53/remix_can_now_import_files_via_swarm/) (это что-то вроде распределенного хранилища для Ethereum, подробнее [здесь](http://ethereum.stackexchange.com/questions/375/what-is-swarm-and-what-is-it-used-for))
 

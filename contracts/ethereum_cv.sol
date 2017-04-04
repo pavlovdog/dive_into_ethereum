@@ -36,28 +36,43 @@ contract EthereumCV is Structures {
     // =====================
 
     function newProject (
+        bool operation,
         string name,
         string description,
         int32 year_start,
         int32 year_finish
     ){
         if (msg.sender != owner) { throw; }
-        projects.push(Project(name, description, year_start, year_finish));
+        if (operation) {
+            projects.push(Project(name, description, year_start, year_finish));
+        }
     }
 
     function newEducation (
+        bool operation,
         string name,
         string speciality,
         int32 year_start,
         int32 year_finish
     ){
         if (msg.sender != owner) { throw; }
-        educations.push(Education(name, speciality, year_start, year_finish));
+        if (operation) {
+            educations.push(Education(name, speciality, year_start, year_finish));
+        }
     }
 
-    function newQuote (string author, string quote) {
+    function editSkill(bool operation, string name, int32 level) {
         if (msg.sender != owner) { throw; }
-        quotes.push(Quote(author, quote));
+        if (operation) {
+            skills.push(Skill(name, level));
+        }
+    }
+
+    function newQuote (bool operation, string author, string quote) {
+        if (msg.sender != owner) { throw; }
+        if (operation) {
+            quotes.push(Quote(author, quote));
+        }
     }
 
     // =====================
