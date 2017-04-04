@@ -2,21 +2,26 @@ pragma solidity ^0.4.0;
 
 contract Structures {
     struct Project {
-        bytes32 name;
-        bytes32 description;
+        string name;
+        string description;
         int32 year_start;
         int32 year_finish;
     }
 
     struct Education {
-        bytes32 name;
-        bytes32 speciality;
+        string name;
+        string speciality;
         int32 year_start;
         int32 year_finish;
     }
 
     struct Quote {
-        bytes32 author;
-        bytes32 quote;
+        string author;
+        string quote;
+    }
+
+    struct Skill {
+        string name;
+        int32 level;
     }
 }

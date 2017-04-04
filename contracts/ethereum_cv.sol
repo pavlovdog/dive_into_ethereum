@@ -1,24 +1,26 @@
 pragma solidity ^0.4.0;
 
-import "structures.sol";
+import "./structures.sol";
 
-contract EthereumCV is Structures{
-    mapping (bytes32 => bytes32) basic_data;
+contract EthereumCV is Structures {
+    mapping (string => string) basic_data;
     address owner;
 
-    Project[] projects;
-    Education[] educations;
-    Quote[] quotes;
+    Project[] public projects;
+    Education[] public educations;
+    Quote[] public quotes;
+    Skill[] public skills;
 
     // =====================
     // ==== CONSTRUCTOR ====
     // =====================
+
     function EthereumCV(
-        bytes32 name,
-        bytes32 age,
-        bytes32 email,
-        bytes32 country,
-        bytes32 city
+        string name,
+        string age,
+        string email,
+        string country,
+        string city
     ){
         basic_data["name"] = name;
         basic_data["age"] = age;
@@ -27,5 +29,48 @@ contract EthereumCV is Structures{
         basic_data["city"] = city;
 
         owner = msg.sender;
+    }
+
+    // =====================
+    // ====== ADD NEW ======
+    // =====================
+
+    function newProject (
+        string name,
+        string description,
+        int32 year_start,
+        int32 year_finish
+    ){
+        if (msg.sender != owner) { throw; }
+        projects.push(Project(name, description, year_start, year_finish));
+    }
+
+    function newEducation (
+        string name,
+        string speciality,
+        int32 year_start,
+        int32 year_finish
+    ){
+        if (msg.sender != owner) { throw; }
+        educations.push(Education(name, speciality, year_start, year_finish));
+    }
+
+    function newQuote (string author, string quote) {
+        if (msg.sender != owner) { throw; }
+        quotes.push(Quote(author, quote));
+    }
+
+    // =====================
+    // ======= USAGE =======
+    // =====================
+    function getBasicData (string arg) returns (string) {
+        return basic_data[arg];
+    }
+
+    function getSize(string arg) returns (uint) {
+        if (sha3(arg) == sha3("projects")) { return projects.length; }
+        if (sha3(arg) == sha3("educations")) { return educations.length; }
+        if (sha3(arg) == sha3("quotes")) { return quotes.length; }
+        if (sha3(arg) == sha3("skills")) { return skills.length; }
     }
 }
