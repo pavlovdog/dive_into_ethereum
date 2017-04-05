@@ -3,6 +3,7 @@ pragma solidity ^0.4.0;
 contract Structures {
     struct Project {
         string name;
+        string link;
         string description;
         int32 year_start;
         int32 year_finish;
