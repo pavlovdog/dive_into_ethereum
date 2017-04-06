@@ -10,7 +10,6 @@ contract EthereumCV is Structures {
     Education[] public educations;
     Skill[] public skills;
     Quote[] public quotes;
-    Contact[] public contacts;
 
     // =====================
     // ==== CONSTRUCTOR ====
@@ -91,9 +90,5 @@ contract EthereumCV is Structures {
         if (sha3(arg) == sha3("skills")) { return skills.length; }
         if (sha3(arg) == sha3("contacts")) { return contacts.length; }
         throw;
-    }
-
-    function contactForm(string email, string name, string message) {
-        contacts.push(Contact(email, name, message));
     }
 }

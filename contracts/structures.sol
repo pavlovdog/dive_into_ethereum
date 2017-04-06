@@ -25,10 +25,4 @@ contract Structures {
         string name;
         int32 level;
     }
-
-    struct Contact {
-        string email;
-        string name;
-        string message;
-    }
 }
