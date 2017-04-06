@@ -28,10 +28,10 @@ contract EthereumCV is Structures {
         basic_data[key] = value;
     }
 
-    function newProject (
+    function editProject (
         bool operation,
         string name,
-        string link;
+        string link,
         string description,
         int32 year_start,
         int32 year_finish
@@ -44,7 +44,7 @@ contract EthereumCV is Structures {
         }
     }
 
-    function newEducation (
+    function editEducation (
         bool operation,
         string name,
         string speciality,
@@ -80,15 +80,17 @@ contract EthereumCV is Structures {
     // =====================
     // ======= USAGE =======
     // =====================
-    function getBasicData (string arg) returns (string) {
+    function getBasicData (string arg) constant returns (string) {
         return basic_data[arg];
     }
 
-    function getSize(string arg) returns (uint) {
+    function getSize(string arg) constant returns (uint) {
         if (sha3(arg) == sha3("projects")) { return projects.length; }
         if (sha3(arg) == sha3("educations")) { return educations.length; }
         if (sha3(arg) == sha3("quotes")) { return quotes.length; }
         if (sha3(arg) == sha3("skills")) { return skills.length; }
+        if (sha3(arg) == sha3("contacts")) { return contacts.length; }
+        throw;
     }
 
     function contactForm(string email, string name, string message) {
