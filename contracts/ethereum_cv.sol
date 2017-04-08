@@ -18,12 +18,16 @@ contract EthereumCV is Structures {
         owner = msg.sender;
     }
 
+    modifier onlyOwner() {
+    	if (msg.sender != owner) { throw; }
+    	_; // Will be replaced with function body
+    }
+
     // =====================
     // ====== ADD NEW ======
     // =====================
 
-    function setBasicData (string key, string value) {
-        if (msg.sender != owner) { throw; }
+    function setBasicData (string key, string value) onlyOwner() {
         basic_data[key] = value;
     }
 
@@ -34,8 +38,7 @@ contract EthereumCV is Structures {
         string description,
         int32 year_start,
         int32 year_finish
-    ){
-        if (msg.sender != owner) { throw; }
+    ) onlyOwner() {
         if (operation) {
             projects.push(Project(name, description, link, year_start, year_finish));
         } else {
@@ -49,8 +52,7 @@ contract EthereumCV is Structures {
         string speciality,
         int32 year_start,
         int32 year_finish
-    ){
-        if (msg.sender != owner) { throw; }
+    ) onlyOwner() {
         if (operation) {
             educations.push(Education(name, speciality, year_start, year_finish));
         } else {
@@ -58,8 +60,7 @@ contract EthereumCV is Structures {
         }
     }
 
-    function editSkill(bool operation, string name, int32 level) {
-        if (msg.sender != owner) { throw; }
+    function editSkill(bool operation, string name, int32 level) onlyOwner() {
         if (operation) {
             skills.push(Skill(name, level));
         } else {
@@ -67,8 +68,7 @@ contract EthereumCV is Structures {
         }
     }
 
-    function editQuote (bool operation, string author, string quote) {
-        if (msg.sender != owner) { throw; }
+    function editQuote (bool operation, string author, string quote) onlyOwner() {
         if (operation) {
             quotes.push(Quote(author, quote));
         } else {
@@ -88,7 +88,6 @@ contract EthereumCV is Structures {
         if (sha3(arg) == sha3("educations")) { return educations.length; }
         if (sha3(arg) == sha3("quotes")) { return quotes.length; }
         if (sha3(arg) == sha3("skills")) { return skills.length; }
-        if (sha3(arg) == sha3("contacts")) { return contacts.length; }
         throw;
     }
 }

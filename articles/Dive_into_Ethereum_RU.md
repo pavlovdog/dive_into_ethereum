@@ -1,8 +1,6 @@
 # Dive into Ethereum
 
-Хайп вокруг технологии **"blockchain"** растет с экспоненциалной скоростью. В этом можно убедиться, как пролистав ленты популярных новостных агенств или открыв Google Trends, так и посмотрев на курсы  криптовалют и капитализации отдельных компаний. Одновременно с этим для обычного пользователя вся эта шумиха продолжает оставаться чем-то загадочным и непонятным (что совершенно нормально!). Другое дело, что большинство разработчиков точно также упорно не понимают, о чем вся эта _цепочка блоков_ и есть ли от нее толк на практике?
-
-В этой статье я постараюсь продемонстрировать работу с технологией блокчейн на масимально приближенном к реальности примере: с помощью платформы Ethereum мы создадим приложение наподобие сайта-визитной карточки, а параллельно с этим я постарюсь рассказать вам про разные инструменты и тонкости в разработке такого рода.
+Хайп вокруг технологии **"blockchain"** растет с экспоненциалной скоростью.
 
 ![preview](https://habrastorage.org/files/f65/dce/6d0/f65dce6d013a4f579c947bcc49f4013a.png)
 
@@ -52,7 +50,7 @@ sudo apt-get install ethereum
 
 ### [Parity](https://parity.io/)
 
-Тем не менее в последнее время все чаще можно встретить другой клиент -  Parity, написанный на Rust. Рост его популярности во многом обеспечил [баг в Geth](https://blog.ethereum.org/2016/11/25/security-alert-11242016-consensus-bug-geth-v1-4-19-v1-5-2/), связанный с реализацией алгоритма консенсуса. Ну а на деле главным отличием является встроенный web интерфейс. Установка:
+Тем не менее в последнее время все чаще можно встретить другой клиент -  Parity, написанный на Rust. Главным его отличием от Geth является встроенный web интерфейс. Как по мне - самый удобный среди всех ныне существующих. Установка:
 
 ```bash
 sudo <(curl https://get.parity.io -Lk)
@@ -74,7 +72,7 @@ sudo <(curl https://get.parity.io -Lk)
 
 ### [Mist](https://github.com/ethereum/mist)
 
-Самый популярный кошелек для Ethereum, хотя на самом деле он умеет намного больше.
+Самый популярный кошелек для Ethereum, хотя на самом деле он умеет намного больше. 
 
 ### [Remix](https://ethereum.github.io/browser-solidity/)
 
@@ -117,13 +115,18 @@ $ meteor
 
 Возможно вы слышали про то, что можно писать контракты не только на Solidity, но и на других языках, например [Serpent](https://github.com/ethereum/wiki/wiki/Serpent). Но последний комит в develop ветке [ethereum/serpent](https://github.com/ethereum/serpent/tree/develop) был примерно полгода назад, так что по видимому язык, увы, deprecated.
 
-Поэтому писать будем только на Solidity. Пока что язык находится на относительно раннем этапе развития, так что никаких сложных конструкций или уникальных абстракций в нем нет. Для примера рассмотрим самый простой контракт, который содержит в себе больше половины всех возможных тонкостей:
+Поэтому писать будем только на Solidity. Пока что язык находится на относительно раннем этапе развития, так что никаких сложных конструкций или уникальных абстракций в нем нет. Так что рассказывать про него я не вижу смысла - любой человек с опытом в программировании сможет свободно писать на нем после 20 минут чтения документации. На ваш выбор существует сразу несколько очень хороших примеров с максимально подробными описаниями: 
 
-Весьма подробная [документация](https://solidity.readthedocs.io/en/develop/) языка, [местами](https://github.com/ethereum/wiki/wiki/%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE-Solidity) даже переведена на русский язык.
+- [Voting contract](http://solidity.readthedocs.io/en/develop/solidity-by-example.html#voting)
+- [Blind Auction](http://solidity.readthedocs.io/en/develop/solidity-by-example.html#blind-auction)
+- [Safe Remote Purchase](http://solidity.readthedocs.io/en/develop/solidity-by-example.html#safe-remote-purchase)
+- Или, уже ставший аналогом "Hello, World" в мире контрактов, - [Greeter contract](https://www.ethereum.org/greeter)
+
+Отдельно стоит отметить (отличную!) [документацию](https://solidity.readthedocs.io/en/develop/) языка, [местами](https://github.com/ethereum/wiki/wiki/%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE-Solidity) даже переведена на русский язык.
 
 ## Создаем контракт-визитку
 
-Самое время создать наш контракт. В конечном итоге это будет приложение-визитка, на которую мы поместим форму обратной связи и само "резюме":
+Самое время создать наш контракт. В конечном итоге это будет приложение-визитка, на которую мы поместим само "резюме":
 
 - Имя, возраст, почта, страна и город
 - Список проектов
@@ -131,15 +134,78 @@ $ meteor
 - Навыки
 - Любимые цитаты
 
+Работатать с приложением можно будет как из обычных специальных клиентов вроде Parity, так и из обычного браузера.
+
 ### Шаблон
 
 Первым делом создадим шаблон контракта и *функцию-конструктор*. Она должна называться также как и сам контракт и вызывается лишь однажды - при загрузке контракта в блокчейн. Мы будем использовать ее для инициализации одной единственной переменной - `address owner`. Как вы уже наверное догадались, в нее будет записан адрес того, кто залил контракт в сеть. А использоваться она будет для реализации функций администрирования, но об этом позже.
 
 ```javascript
+pragma solidity ^0.4.0;
+
+contract EthereumCV is Structures {
+    address owner;
+
+    // =====================
+    // ==== CONSTRUCTOR ====
+    // =====================
+    function EthereumCV() {
+        owner = msg.sender;
+    }
+}
 
 ```
 
 ### Базовая информация
+
+Следующим шагом добавим возможность указывать бакзовую информацию об авторе - имя, почту, адрес и так далее. Для этого будем использовать самый обычный mapping, который нужно объявить в начало контракта:
+
+```javascript
+address owner;
+mapping (string => string) basic_data;
+```
+
+Для того, чтобы иметь возможность "получать" от контракта эти данные, создадим следующую функцию:
+
+```javascript
+function getBasicData (string arg) constant returns (string) {
+	return basic_data[arg];
+}
+```
+
+Здесь все просто, стоит только отметить модификатор constant - его можно (и нужно!) использовать для тех функций, которые не изменяют state приложения.
+
+### Администрирование
+
+Теперь стоит задуматься о наполнении своего резюме базовым контентом. В самом простом случае мы могли бы обойтись функцией вроде
+
+```javascript
+function setBasicData (string key, string value) {
+	basic_data[key] = value;
+}
+```
+
+Но в этом случае любой при желании смог бы изменить, например, наше имя. К счастью, есть способ всего в одну строку пресечь любые такие попытки:
+
+```javascript
+function setBasicData (string key, string value) {
+	if (msg.sender != owner) { throw; }
+	basic_data[key] = value;
+}
+```
+
+Так как нам еще не раз придется использовать подобную конструкцию (при добавлении нового проекта, например), то стоит создать специальный *модификатор*:
+
+```javascript
+modifier onlyOwner() {
+	if (msg.sender != owner) { throw; }
+	_; // Will be replaced with function body
+}
+
+function setBasicData (string key, string value) onlyOwner() {
+	basic_data[key] = value;
+}
+```
 
 ### Модульность
 
@@ -148,52 +214,93 @@ $ meteor
 Для этого в той же директории создадим новый файл `structures.sol` и контракт `Structures`. А уже внутри него опишем каждую из структур:
 
 ```javascript
+pragma solidity ^0.4.0;
 
+contract Structures {
+    struct Project {
+        string name;
+        string link;
+        string description;
+        int32 year_start;
+        int32 year_finish;
+    }
+
+    struct Education {
+        string name;
+        string speciality;
+        int32 year_start;
+        int32 year_finish;
+    }
+
+    struct Quote {
+        string author;
+        string quote;
+    }
+
+    struct Skill {
+        string name;
+        int32 level;
+    }
+}
 ```
 
 Теперь осталось только импортировать полученный файл и унаследовать наш главный контракт от `Structures`. Для этого достаточно добавить всего пару строк:
 
 ```javascript
+pragma solidity ^0.4.0;
 
+import "./structures.sol";
+
+contract EthereumCV is Structures {
+    address owner;
+    mapping (string => string) basic_data;
+
+    Project[] public projects;
+    Education[] public educations;
+    Skill[] public skills;
+    Quote[] public quotes;
+
+	// ....
+}
 ```
 
-Самые сообразительные уже догадались, что нотация `Project[] projects` означает создание динамического массива с элеметнами типа `Project`. А вот с *модификатором* `public` уже сложнее. По сути, он заменяет нам написание функции вроде `get_project(int position)` - компилятор сделает всю работу за нас.
+Самые сообразительные уже догадались, что нотация `Project[] projects` означает создание динамического массива с элеметнами типа `Project`. А вот с *модификатором* `public` уже сложнее. По сути, он заменяет нам написание функции вроде `get_project(int position) { return projects[position]; }` - компилятор сам создаст такую функцию. Называться она будет так же как и переменная, в нашем случае - projects.
+
+Вы можете спросить - а почему мы в самом начале не написали `mapping (string => string) public basic_data`, а вместо этого сами создавали такую функцию? Причина банальна - `public` пока что не умеет работать c переменными, для которых ключом является динамический тип данных (`string` это именно такой тип).
+
+```bash
+Unimplemented feature (/src/libsolidity/codegen/ExpressionCompiler.cpp:105): Accessors for mapping with dynamically-sized keys not yet implemented.
+```
+
+В этом случае нужно объявлять `basic_data` как например `mapping (bytes32 => string)`.
 
 **BTW** На всякий случай отмечу, что кроме локального файла, **Remix** умеет импортировать `.sol` файлы по ссылке на Github и даже [с помощью протокола Swarm](https://www.reddit.com/r/ethereum/comments/5vpm53/remix_can_now_import_files_via_swarm/) (это что-то вроде распределенного хранилища для Ethereum, подробнее [здесь](http://ethereum.stackexchange.com/questions/375/what-is-swarm-and-what-is-it-used-for))
 
-### Администрирование
+### Загружаем и удаляем данные 
 
-Теперь стоит задуматься о наполнение нашего резюме всяческим контентом. Самая наивная реализация подразумевает четыре функции для каждого типа данных, что-то вроде:
-
-```javascript
-function newQuote(string author, string quote) {
-  quotes.push(Quote(author, quote));
-}
-
-// Same functions for skills, projects, educations
-// ...
-```
-
-Но в этом случае любой желающий сможет вызвать данную функцию и добавить в ваше резюме Бог знает что. Но этого можно избежать, прибегнув к ранее упомянутой переменной owner. Достаточно внутри каждой из функций сравнивать текущий адрес с owner, и завершать работу если они не равны.
+Думаю многие из вас уже сами догадались, как стоит реализовать такую функцию. Покажу на примере списка цитат, в остальных случаях все аналогично:
 
 ```javascript
-function newQuote(string author, string quote) {
-  if (msg.sender != owner) { return; }
-  quotes.push(Quote(author, quote));
+function editQuote (bool operation, string author, string quote) onlyOwner() {
+	if (operation) {
+		quotes.push(Quote(author, quote));
+	} else {
+		delete quotes[quotes.length - 1];
+	}
 }
 ```
 
-Замечу, что привычный механизм авторизации через пароль здесь не имеет смысла: запомните как догму, **что все данные, попавшие в блокчейн становятся доступны всем без исключения**. Никаких встроенных механизмов шифрования или обфускации не существует. Поэтому достаточно самых базовых навыков реверс-инженеринга, чтобы достать ваш пароль и обойти защиту. Чуть лучше использовать хэши паролей (не забудьте посолить!), но все равно будьте готовы, что "достать" их из блокчейна - дело нескольких минут, после чего можно запускать радужные таблицы и проверять их на прочность.
+С помощью параметра `operation` мы избавились от написания отдельной функции для удаления последней цитаты (костыльный аналог `.pop()` в Python). Хотя нужно отметить, что такой способ избавления от элемента на самом деле не совсем корректный. Сам элемент конечно же будет удален, но на месте индекса останется пустое место. В нашем случае это не смертельно (мы будем проверять пустоту отдельных элементов на стороне клиента), но вообще говоря про это не стоит забывать. Тем более что сдвинуть весь массив  и уменьшить счетчик длины [не так уж сложно](http://ethereum.stackexchange.com/questions/1527/how-to-delete-an-element-at-a-certain-index-in-an-array).
 
-Следующим шагом стоит задуматься о редактировании своего резюме. Не будем плодить лишних функций
-
-### Отдаем данные 
-
-### Форма обратной связи
+### Отдаем данные
 
 ### Деплой
 
+
+
 ## Добавляем UI
+
+Ниже я расскажу про самый распостраненный способ добавить интрефейс к вашему контракту.
 
 ### [Web3.js](https://github.com/ethereum/web3.js)
 
@@ -201,14 +308,21 @@ function newQuote(string author, string quote) {
 sudo npm install web3 -g
 ```
 
-### Metamask
+### [Metamask](https://metamask.io/)
+
+
 
 ### JS bindings
+
+
+
+### Результат
+
+Теперь, когда вы со всем разобрались, можно браться за верстку и JS. Я использовал [Vue.js](https://vuejs.org), 
 
 ## Ссылки
 
 - [MetaMask](https://medium.com/metamask/metamask-ff7d3571f331)
-- [MetaMask 3 Migration Guide](https://medium.com/metamask/metamask-3-migration-guide-914b79533cdd)
 - [Learning Solidity Part 1: Contract Dev with MetaMask](https://karl.tech/learning-solidity-part-1-deploy-a-contract/)
 - [Learning Solidity Part 2: Commit-Reveal Voting](https://karl.tech/learning-solidity-part-2-voting/)
 - [How to use MetaMask](https://www.cryptocompare.com/wallets/guides/how-to-use-metamask/)
