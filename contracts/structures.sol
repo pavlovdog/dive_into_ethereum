@@ -1,6 +1,6 @@
 pragma solidity ^0.4.0;
 
-contract Structures {
+library Structures {
     struct Project {
         string name;
         string link;

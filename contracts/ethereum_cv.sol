@@ -2,14 +2,14 @@ pragma solidity ^0.4.0;
 
 import "./structures.sol";
 
-contract EthereumCV is Structures {
+contract EthereumCV {
     mapping (string => string) basic_data;
     address owner;
 
-    Project[] public projects;
-    Education[] public educations;
-    Skill[] public skills;
-    Quote[] public quotes;
+    Structures.Project[] public projects;
+    Structures.Education[] public educations;
+    Structures.Skill[] public skills;
+    Structures.Quote[] public quotes;
 
     // =====================
     // ==== CONSTRUCTOR ====
@@ -20,7 +20,7 @@ contract EthereumCV is Structures {
 
     modifier onlyOwner() {
     	if (msg.sender != owner) { throw; }
-    	_; // Will be replaced with function body
+    	_; // Will be replaced with function's body
     }
 
     // =====================
@@ -40,7 +40,7 @@ contract EthereumCV is Structures {
         int32 year_finish
     ) onlyOwner() {
         if (operation) {
-            projects.push(Project(name, description, link, year_start, year_finish));
+            projects.push(Structures.Project(name, description, link, year_start, year_finish));
         } else {
             delete projects[projects.length - 1];
         }
@@ -54,7 +54,7 @@ contract EthereumCV is Structures {
         int32 year_finish
     ) onlyOwner() {
         if (operation) {
-            educations.push(Education(name, speciality, year_start, year_finish));
+            educations.push(Structures.Education(name, speciality, year_start, year_finish));
         } else {
             delete educations[educations.length - 1];
         }
@@ -62,7 +62,7 @@ contract EthereumCV is Structures {
 
     function editSkill(bool operation, string name, int32 level) onlyOwner() {
         if (operation) {
-            skills.push(Skill(name, level));
+            skills.push(Structures.Skill(name, level));
         } else {
             delete skills[skills.length - 1];
         }
@@ -70,7 +70,7 @@ contract EthereumCV is Structures {
 
     function editQuote (bool operation, string author, string quote) onlyOwner() {
         if (operation) {
-            quotes.push(Quote(author, quote));
+            quotes.push(Structures.Quote(author, quote));
         } else {
             delete quotes[quotes.length - 1];
         }
