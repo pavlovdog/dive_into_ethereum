@@ -5,8 +5,6 @@ library Structures {
         string name;
         string link;
         string description;
-        int32 year_start;
-        int32 year_finish;
     }
 
     struct Education {
@@ -16,9 +14,10 @@ library Structures {
         int32 year_finish;
     }
 
-    struct Quote {
-        string author;
-        string quote;
+    struct Publication {
+        string name;
+        string link;
+        string language;
     }
 
     struct Skill {

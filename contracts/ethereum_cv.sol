@@ -9,7 +9,7 @@ contract EthereumCV {
     Structures.Project[] public projects;
     Structures.Education[] public educations;
     Structures.Skill[] public skills;
-    Structures.Quote[] public quotes;
+    Structures.Publication[] public publications;
 
     // =====================
     // ==== CONSTRUCTOR ====
@@ -35,12 +35,10 @@ contract EthereumCV {
         bool operation,
         string name,
         string link,
-        string description,
-        int32 year_start,
-        int32 year_finish
+        string description
     ) onlyOwner() {
         if (operation) {
-            projects.push(Structures.Project(name, description, link, year_start, year_finish));
+            projects.push(Structures.Project(name, description, link));
         } else {
             delete projects[projects.length - 1];
         }
@@ -68,11 +66,11 @@ contract EthereumCV {
         }
     }
 
-    function editQuote (bool operation, string author, string quote) onlyOwner() {
+    function editPublication (bool operation, string name, string link, string language) onlyOwner() {
         if (operation) {
-            quotes.push(Structures.Quote(author, quote));
+            publications.push(Structures.Publication(name, link, language));
         } else {
-            delete quotes[quotes.length - 1];
+            delete publications[publications.length - 1];
         }
     }
 
@@ -86,7 +84,7 @@ contract EthereumCV {
     function getSize(string arg) constant returns (uint) {
         if (sha3(arg) == sha3("projects")) { return projects.length; }
         if (sha3(arg) == sha3("educations")) { return educations.length; }
-        if (sha3(arg) == sha3("quotes")) { return quotes.length; }
+        if (sha3(arg) == sha3("publications")) { return publications.length; }
         if (sha3(arg) == sha3("skills")) { return skills.length; }
         throw;
     }
