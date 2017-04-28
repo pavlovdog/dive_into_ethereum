@@ -484,7 +484,7 @@ function startApp() {
 
 ### Итог
 
-Теперь, когда вы со всем разобрались, можно браться за верстку и JS. Я использовал [Vue.js](https://vuejs.org) и [Spectre.css](https://picturepan2.github.io/spectre/), для визуализации навыков добавил [Google Charts](https://developers.google.com/chart/). Если у пользователя не установлен Metamask или браузер не Chrome, то показывается предупреждение, сделанное с помощью [SweetAlert2](https://limonte.github.io/sweetalert2/). Результат можете увидеть на [pavlovdog.github.io](https://pavlovdog.github.io/):
+Теперь, когда вы со всем разобрались, можно браться за верстку и JS. Я использовал [Vue.js](https://vuejs.org) и [Spectre.css](https://picturepan2.github.io/spectre/), для визуализации навыков добавил [Google Charts](https://developers.google.com/chart/).  Результат можете увидеть на [pavlovdog.github.io](https://pavlovdog.github.io/):
 
 ![cv](https://habrastorage.org/files/7fe/505/d75/7fe505d7535e4866a37bc6a70562dcdc.jpg)
 
