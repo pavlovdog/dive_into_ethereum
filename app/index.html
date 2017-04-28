@@ -5,66 +5,76 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="First CV in the world, which is stored in the blockchain!">
+    <link rel="stylesheet" type="text/css" href="css/spectre.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/sweetalert2/6.6.2/sweetalert2.min.css">
 
     <title>Sergey Potekhin CV</title>
 
-    <script src="js/web3.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/abi.js"></script>
     <script src="js/onload.js"></script>
+    <script src="https://cdn.jsdelivr.net/sweetalert2/6.6.2/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/bulma.css">
   </head>
-  <body class="layout-default">
-    <div class="container">
-      <nav class="nav">
-        <div class="nav-left">
-          <a class="nav-item">
-            <img src="img/logo.png" alt="">
-          </a>
-        </div>
+  <body style="padding-top: 30px">
+    <section class="container grid-960" id="app">
+      <div class="columns">
+        <div class="column col-6 col-md-12">
+          <h3>Hi! My name is <mark>{{ basic_data["name"] }}</mark></h3>
+          <p clss="notes">And this is the first CV in the world, built with <a href="https://www.ethereum.org/">Ethereum blockchain</a>. Every word or text section, which looks like <mark>this</mark>, is stored in the smart-contract.</p>
+          <p>BTW, this project (<a href="#">Ethereum_CV</a>) is open-source, so pull requests welcome!</p>
+          <ul>
+            <li><code>Ropsten</code> <a href="https://ropsten.etherscan.io/address/0xcfc13ef85d5c37c0b54da991289f44450c3f30d6" target="_blank">0xcfc13ef85d5c37c0b54da991289f44450c3f30d6</a></li>
+          </ul>
 
-        <div class="nav-right nav-menu">
-          <span class="nav-item">
-            <a class="button">
-              <span class="icon">
-                <i class="fa fa-code"></i>
-              </span>
-              <span>Github</span>
-            </a>
-            <a class="button is-info">
-              <span class="icon">
-                <i class="fa fa-twitter"></i>
-              </span>
-              <span>Tweet</span>
-            </a>
-          </span>
+          <h4>About me</h4>
+          <p>I'm from <mark>{{basic_data["address"]}}</mark> and I love to develop things. Now my biggest passion is blockchain technology (Ethereum, Bitcoin, etc). Also I'm professsional full-stack developer.</p>
         </div>
-      </nav>
-    </div>
+        <div class="column col-6 col-md-12">
+          <h4><mark>My education</mark></h4>
+          <div v-for="(key, value) in educations">
+            <h5>{{key.name}}</h5>
+            <time>{{key.year_start}} - {{key.year_finish}}</time>
+            <p>{{key.speciality}}</p>
+          </div>
+          <div class="column col-12 divider"></div>
+          <h4><mark>Contacts</mark></h4>
+          <p>Feel free to contact me:</p>
+          <ul>
+            <li>Email : <a :href="'mailto:' + basic_data['email']">{{basic_data["email"]}}</a></li>
+            <li>Phone : <a :href="'tel:' + basic_data['tel']">{{basic_data["tel"]}}</a></li>
+            <li>Github : <a :href="basic_data['github']" target="_blank">{{basic_data["github"]}}</a></li>
+            <li>Stackexchange : <a :href="basic_data['stackexchange']" target="_blank">{{basic_data["stackexchange"]}}</a></li>
+          </ul>
+        </div>
+        <div class="column col-12 divider"></div>
 
-    <section class="section">
-      <div class="container">
-        <div class="columns">
-          <div class="column is-4">
-            <h1 class="title">Hi, I'm Sergey Potekhin</h1>
-            <h2 class="subtitle">
-              Full-stack developer from Moscow
-              <a href="mailto:pavlovdog.moscow@gmail.com">pavlovdog.moscow@gmail.com</a>
-            </h2>
-            <hr>
-            <div class="content">
-              <p>My passions are:</p>
-              <ul>
-                <li>Python</li>
-                <li>Bitcoin</li>
-                <li>Ethereum</li>
-                <li>Web development</li>
-              </ul>
-            </div>
+        <div class="column col-12 col-md-12">
+          <h3><mark>Skills</mark></h3>
+          <div align="center" style="width:100%; heigth:100%;" id="skills" style="width : 100%"></div>
+        </div>
+        <div class="column col-12 divider"></div>
+
+        <div class="column col-5 col-md-12">
+          <h3><mark>Publications</mark></h3>
+          <div v-for="(key, data) in publications">
+            <h5><a v-bind:href="key.link" target="_blank">{{key.name}}</a></h5>
+            {{key.desc}}
           </div>
         </div>
+        <div class="column col-7 col-md-12">
+          <h3><mark>Projects</mark></h3>
+          <div v-for="(key, data) in projects">
+            <h4><a v-bind:href="key.link" target="_blank">{{key.name}}</a></h4>
+            <p>{{key.desc}}</p>
+          </div>
+        </div>
+        <div class="column col-12 divider"></div>
       </div>
+
     </section>
+
   </body>
-  <script src="js/abi.js"></script>
   <script src="js/app.js"></script>
 </html>
