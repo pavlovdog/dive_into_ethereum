@@ -112,7 +112,7 @@ $ geth attach console # Attach Geth to the PArity node (Do it in another window)
 
 ### [Remix](https://ethereum.github.io/browser-solidity/)
 
-Самая популярная IDE для разработки контрактов. Работает в браузере по адресу [ethereum.github.io/browser-solidity/](ethereum.github.io/browser-solidity/), поддерживает огромное число функций:
+Самая популярная IDE для разработки контрактов. Работает в браузере по адресу [ethereum.github.io/browser-solidity/](https://ethereum.github.io/browser-solidity/), поддерживает огромное число функций:
 
 - Подключение к указанному RPC провайдеру
 - Компиляция кода в байткод / опкоды
